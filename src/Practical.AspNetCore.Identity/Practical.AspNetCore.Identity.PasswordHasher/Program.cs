@@ -123,6 +123,21 @@ namespace Practical.AspNetCore.Identity.PasswordHasher
         {
             V2();
             V3();
+            VerifyHashes();
+        }
+
+        private static void VerifyHashes()
+        {
+            var lines = File.ReadAllLines(@"hashes.txt");
+            var passwordHasher = new PasswordHasher<object>();
+
+            foreach (var line in lines)
+            {
+                var userName = line.Split('\t')[0];
+                var hash = line.Split('\t')[1];
+                var check = passwordHasher.VerifyHashedPassword(null, hash, userName);
+                Console.WriteLine(line + ": " + check);
+            }
         }
 
         private static void V2()
